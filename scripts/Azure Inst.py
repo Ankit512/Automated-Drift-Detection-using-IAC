@@ -109,11 +109,11 @@ def check_azure_drift():
     # 3. Report Results
     if drift_report:
         print("\n" + "="*30)
-        print("⚠️  DRIFT DETECTED REPORT")
+        print("DRIFT DETECTED REPORT")
         print("="*30)
         print(json.dumps(drift_report, indent=2))
     else:
-        print("\n✅ All checked resources are IN_SYNC and Compliant.")
+        print("\n All checked resources are IN_SYNC and Compliant.")
 
 # This block allows you to run it locally
 if __name__ == "__main__":
