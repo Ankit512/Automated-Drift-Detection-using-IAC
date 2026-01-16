@@ -7,16 +7,26 @@ import logging
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
+# ### [MODIFIED] Configuration Block
+CONFIG = {
+    "SNS_TOPIC_ARN": "arn:aws:sns:ap-south-1:471112828084:Detect_Drift",
+    "STACK_ARNS": [
+        "arn:aws:cloudformation:ap-south-1:471112828084:stack/DynamoDB/eac28c70-f209-11ee-8b09-0a02e01a9aa3",
+        "arn:aws:cloudformation:ap-south-1:471112828084:stack/EC2instance/74c0e490-f209-11ee-a0af-0aac48631e59",
+        "arn:aws:cloudformation:ap-south-1:471112828084:stack/S3Bucket/edefa5f0-f208-11ee-bd3f-06859283fa06"
+    ]
+}
+
 def lambda_handler(event, context):
     # Initialize the CloudFormation and SNS clients
     cf_client = boto3.client('cloudformation')  # Initialize CloudFormation client
     sns_client = boto3.client('sns')  # Initialize SNS client
     
     # Specify your stack names and SNS topic ARN
-    stack_names = ['arn:aws:cloudformation:ap-south-1:471112828084:stack/DynamoDB/eac28c70-f209-11ee-8b09-0a02e01a9aa3', 'arn:aws:cloudformation:ap-south-1:471112828084:stack/EC2instance/74c0e490-f209-11ee-a0af-0aac48631e59', 'arn:aws:cloudformation:ap-south-1:471112828084:stack/S3Bucket/edefa5f0-f208-11ee-bd3f-06859283fa06']
+    stack_names = CONFIG['STACK_ARNS']
     #stack_names = ['arn:aws:cloudformation:ap-south-1:471112828084:stack/EC2instance/74c0e490-f209-11ee-a0af-0aac48631e59']
     # Add your stack names here
-    sns_topic_arn = 'arn:aws:sns:ap-south-1:471112828084:Detect_Drift'  # Change to your SNS topic ARN
+    sns_topic_arn = CONFIG['SNS_TOPIC_ARN']
     # response = cf_client.detect_stack_drift(StackName="arn:aws:cloudformation:ap-south-1:471112828084:stack/EC2instance/74c0e490-f209-11ee-a0af-0aac48631e59")
     # print(response)
     # drift_status_response = cf_client.describe_stack_drift_detection_status(StackDriftDetectionId=response['StackDriftDetectionId'])
@@ -87,3 +97,4 @@ def lambda_handler(event, context):
         'statusCode': 200,
         'body': json.dumps('Drift detection and notification sent for all stacks.')
     }
+
